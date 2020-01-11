@@ -12,6 +12,5 @@ public class MyClassLoaderTest {
         Method welcome = aClass.getMethod("welcome");
         String result = (String) welcome.invoke(hellworld);
         System.out.println("Result:"+result);
-
     }
 }

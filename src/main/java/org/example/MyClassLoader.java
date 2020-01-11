@@ -1,6 +1,7 @@
 package org.example;
 
 import java.io.ByteArrayOutputStream;
+import java.io.UnsupportedEncodingException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -25,8 +26,15 @@ public class MyClassLoader extends ClassLoader {
 
     @Override
     protected Class<?> findClass(String name) throws ClassNotFoundException {
-       byte[] classBytes= this.readClassBytes(name);
-       if (classBytes == null || classBytes.length == 0){
+        byte[] classBytes= this.readClassBytes(name);
+        String encoderStr=null;
+        try {
+            encoderStr=new String(classBytes,"UTF-8");
+            classBytes=Utils.base64DecoderByte(encoderStr);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        if (classBytes == null || classBytes.length == 0){
            throw new ClassNotFoundException("找不到类");
        }
         return this.defineClass(name,classBytes,0,classBytes.length);
